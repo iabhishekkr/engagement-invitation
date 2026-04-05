@@ -3,9 +3,9 @@ import ScratchCard from './ScratchCard';
 import FadeSection from './FadeSection';
 import { WEDDING_DATA } from '../constants';
 
-const Reveal = ({ content, lang, handleReveal, allRevealed }) => {
+const Reveal = ({ content, lang, handleReveal, allRevealed, className = '' }) => {
   return (
-    <FadeSection className="reveal-section">
+    <FadeSection className={`reveal-section ${className}`}>
       <h2 className="section-title script-title">{content.revealTitle}</h2>
       <p className="section-subtitle">{content.revealSubtitle}</p>
       <div className="scratch-container">

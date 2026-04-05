@@ -240,13 +240,14 @@ function App() {
           lang={lang}
           handleReveal={handleReveal}
           allRevealed={allRevealed}
+          className="paged-background"
         />
 
         {allRevealed && (
           <>
-            <Countdown content={content} timeLeft={timeLeft} />
-            <Venue content={content} />
-            <ThankYou content={content} />
+            <Countdown content={content} timeLeft={timeLeft} className="paged-background" />
+            <Venue content={content} className="paged-background" />
+            <ThankYou content={content} className="paged-background" />
           </>
         )}
       </main>

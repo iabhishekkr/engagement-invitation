@@ -9,6 +9,14 @@
   --font-scratch: 'Great Vibes', cursive;
 }
 
+.paged-background {
+  background-image: url('/assets/background.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  width: 100%;
+}
+
 /* Hindi specific font variables override */
 .app-container[data-lang="hi"] {
   --font-serif: 'Rozha One', serif;
@@ -27,7 +35,7 @@ html {
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
   /* Add scroll-padding if needed for sticky headers, but we don't have one */
-  height: 100%; 
+  height: 100%;
 }
 
 body {
@@ -37,7 +45,8 @@ body {
   padding: 0;
   overflow-x: hidden !important;
   position: relative;
-  background-color: #F1EBDF; /* Match --bg-color */
+  background-color: #F1EBDF;
+  /* Match --bg-color */
 }
 
 #root {
@@ -89,7 +98,7 @@ body {
   -webkit-filter: url(#chroma-key-white);
   background: transparent !important;
   /* Hardware acceleration hints to prevent black artifacts during scroll */
-  transform: translateZ(0); 
+  transform: translateZ(0);
   -webkit-transform: translateZ(0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -149,13 +158,16 @@ body {
 }
 
 @keyframes pulseCircle {
-  0%, 100% { 
+
+  0%,
+  100% {
     transform: scale(1);
-    border-color: rgba(255, 255, 255, 0.5); 
+    border-color: rgba(255, 255, 255, 0.5);
   }
-  50% { 
+
+  50% {
     transform: scale(1.05);
-    border-color: rgba(255, 255, 255, 0.9); 
+    border-color: rgba(255, 255, 255, 0.9);
   }
 }
 
@@ -342,7 +354,8 @@ section {
 
 .subtitle {
   font-family: var(--font-serif);
-  font-size: 1.1rem;
+  font-size: 1.3rem;
+  font-weight: 700;
   letter-spacing: 4px;
   text-transform: uppercase;
 }
@@ -530,7 +543,8 @@ section {
     align-items: center;
   }
 
-  .venue-image, .venue-details {
+  .venue-image,
+  .venue-details {
     flex: 1;
     width: 50%;
   }
@@ -568,7 +582,6 @@ section {
   height: auto;
   border-radius: 20px;
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
-  mix-blend-mode: multiply;
 }
 
 .venue-name {
@@ -724,7 +737,8 @@ section {
   }
 
   .subtitle {
-    font-size: 0.65rem;
+    font-size: 0.8rem;
+    font-weight: 700;
     letter-spacing: 2px;
   }
 

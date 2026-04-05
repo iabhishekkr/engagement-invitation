@@ -1,9 +1,9 @@
 import React from 'react';
 import FadeSection from './FadeSection';
 
-const Venue = ({ content }) => {
+const Venue = ({ content, className = '' }) => {
   return (
-    <FadeSection className="venue-section">
+    <FadeSection className={`venue-section ${className}`}>
       <h2 className="section-title script-title">{content.venueSectionTitle}</h2>
       <div className="venue-content">
         <div className="venue-image">
