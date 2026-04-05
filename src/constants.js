@@ -32,7 +32,6 @@ export const WEDDING_DATA = {
     venueTitle: "डिवाइन होटल एंड रिसॉर्ट्स",
     venueAddressPart1: "शिखर मोड़, रोड, मानपुर रेलवे स्टेशन रोड",
     venueAddressPart2: "प्राइमरी स्कूल के पास, गया, बिहार 823003",
-    footerThankYou: "धन्यवाद",
-    footerDesign: "Theatre Demo द्वारा डिज़ाइन | 🤎 के साथ निर्मित"
+    footerThankYou: "धन्यवाद"
   }
 };

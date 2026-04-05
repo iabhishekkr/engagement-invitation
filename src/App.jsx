@@ -41,7 +41,8 @@ function App() {
   const [lang, setLang] = useState('en'); // 'en' or 'hi'
   const [isScrolledPast, setIsScrolledPast] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
-  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(true);
+  const [isMusicManuallyPaused, setIsMusicManuallyPaused] = useState(false);
   const [isConfettiActive, setIsConfettiActive] = useState(false);
   const audioRef = useRef(null);
   const [windowSize, setWindowSize] = useState({
@@ -102,12 +103,50 @@ function App() {
     if (audioRef.current) {
       if (isMusicPlaying) {
         audioRef.current.pause();
+        setIsMusicManuallyPaused(true);
       } else {
-        audioRef.current.play();
+        audioRef.current.play().catch(e => console.log("Manual play blocked:", e));
+        setIsMusicManuallyPaused(false);
       }
       setIsMusicPlaying(!isMusicPlaying);
     }
   };
+
+  const isMusicPlayingRef = useRef(isMusicPlaying);
+  useEffect(() => {
+    isMusicPlayingRef.current = isMusicPlaying;
+  }, [isMusicPlaying]);
+
+  // Handle music pause/resume based on tab visibility and focus
+  useEffect(() => {
+    const handlePause = () => {
+      if (audioRef.current && isMusicPlayingRef.current) {
+        audioRef.current.pause();
+      }
+    };
+
+    const handleResume = () => {
+      if (audioRef.current && isMusicPlayingRef.current) {
+        audioRef.current.play()
+          .catch(err => console.log("Resume blocked:", err));
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') handlePause();
+      else handleResume();
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('blur', handlePause);
+    window.addEventListener('focus', handleResume);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('blur', handlePause);
+      window.removeEventListener('focus', handleResume);
+    };
+  }, []); // Run once on mount
 
   const content = WEDDING_DATA[lang];
 
