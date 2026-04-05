@@ -26,7 +26,8 @@
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  opacity: 0.3; /* Adjusted opacity */
+  opacity: 0.6;
+  /* Adjusted opacity */
   z-index: -1;
   pointer-events: none;
 }
