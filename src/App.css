@@ -10,11 +10,25 @@
 }
 
 .paged-background {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+}
+
+.paged-background::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-image: url('/assets/background.jpeg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  width: 100%;
+  opacity: 0.3; /* Adjusted opacity */
+  z-index: -1;
+  pointer-events: none;
 }
 
 /* Hindi specific font variables override */
