@@ -83,6 +83,17 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const isApple = /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent) && !window.MSStream;
+  const [isCurtainBelow, setIsCurtainBelow] = useState(false);
+
+  // Trigger z-index drop for Safari/Apple devices 1.5s after opening starts
+  useEffect(() => {
+    if (curtainState === 'opening' && isApple) {
+      const timer = setTimeout(() => setIsCurtainBelow(true), 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [curtainState, isApple]);
+
   // Handle Curtain click
   const handleCurtainClick = () => {
     if (curtainState === 'closed') {
@@ -232,27 +243,12 @@ function App() {
         />
       )}
       {/* SVG Chroma Key Filter to make the MP4's white hole mathematically transparent while keeping red opaque */}
-      <svg aria-hidden="true" style={{ position: 'absolute', width: 0, height: 0, pointerEvents: 'none', visibility: 'hidden' }}>
-        <filter id="chroma-key-white" filterUnits="objectBoundingBox" x="-50%" y="-50%" width="200%" height="200%">
-          <feColorMatrix type="matrix" values="
-            1 0 0 0 0
-            0 1 0 0 0
-            0 0 1 0 0
-            -2 -2 -2 0 5
-          " />
-        </filter>
-      </svg>
-
-      {/* SVG Chroma Key Filter to make the MP4's white hole mathematically transparent while keeping red opaque */}
-      <svg aria-hidden="true" style={{ position: 'absolute', width: 0, height: 0, pointerEvents: 'none', visibility: 'hidden' }}>
-        <filter id="chroma-key-white" filterUnits="objectBoundingBox" x="-50%" y="-50%" width="200%" height="200%">
-          <feColorMatrix type="matrix" values="
-            1 0 0 0 0
-            0 1 0 0 0
-            0 0 1 0 0
-            -2 -2 -2 0 5
-          " />
-        </filter>
+      <svg aria-hidden="true" style={{ position: 'absolute', width: '1px', height: '1px', opacity: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+        <defs>
+          <filter id="chroma-key-white" colorInterpolationFilters="sRGB" x="-50%" y="-50%" width="200%" height="200%">
+            <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  -1.5 -1.5 -1.5 0 4" />
+          </filter>
+        </defs>
       </svg>
 
       {/* Floating Controls (Language & Music) */}
@@ -283,7 +279,7 @@ function App() {
               left: 0,
               width: '100%',
               height: '100vh',
-              zIndex: 9999,
+              zIndex: (isApple && isCurtainBelow) ? 0 : 9999,
               pointerEvents: curtainState === 'opened' ? 'none' : 'auto',
               display: isScrolledPast ? 'none' : 'block' // Clean disposal when scrolled way past
             }}
