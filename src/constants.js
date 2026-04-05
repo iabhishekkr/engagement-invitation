@@ -4,7 +4,7 @@ export const WEDDING_DATA = {
     names: "Abhishek & Manisha",
     nameParts: { first: "Abhishek", sep: "&", second: "Manisha" },
     subtitle: "ARE GETTING ENGAGED",
-    curtainTap: "Tap to continue",
+    curtainTap: "Tap to open",
     scrollDown: "Scroll down",
     revealTitle: "Reveal",
     revealSubtitle: "SCRATCH TO DISCOVER THE DATE",
@@ -29,9 +29,9 @@ export const WEDDING_DATA = {
     countdownTitle: "प्रतीक्षा की घड़ी",
     timeLabels: { days: "दिन", hours: "घंटे", mins: "मिनट", secs: "सेकंड" },
     venueSectionTitle: "उत्सव स्थल",
-    venueTitle: "विला मेडिसी दी आर्टीमिनो",
-    venueAddressPart1: "वियाले पापा जियोवानी XXIII, 1",
-    venueAddressPart2: "59015 आर्टिमिनो पी ओ, फ्लोरेंस, इटली",
+    venueTitle: "डिवाइन होटल एंड रिसॉर्ट्स",
+    venueAddressPart1: "शिखर मोड़, रोड, मानपुर रेलवे स्टेशन रोड",
+    venueAddressPart2: "प्राइमरी स्कूल के पास, गया, बिहार 823003",
     footerThankYou: "धन्यवाद",
     footerDesign: "Theatre Demo द्वारा डिज़ाइन | 🤎 के साथ निर्मित"
   }

@@ -128,20 +128,20 @@ body {
   align-items: center;
   width: 80px;
   height: 80px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.7);
   border-radius: 50%;
   animation: pulseCircle 2s infinite ease-in-out;
 }
 
 .instruction-hand-icon {
-  color: rgba(255, 255, 255, 0.6);
-  opacity: 0.8;
+  color: rgba(255, 255, 255, 0.9);
+  opacity: 1;
 }
 
 .instruction-box p {
   font-size: 0.95rem;
   margin: 0;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.8);
   font-family: var(--font-body);
   letter-spacing: 1.5px;
   font-weight: 400;
@@ -151,11 +151,11 @@ body {
 @keyframes pulseCircle {
   0%, 100% { 
     transform: scale(1);
-    border-color: rgba(255, 255, 255, 0.2); 
+    border-color: rgba(255, 255, 255, 0.5); 
   }
   50% { 
     transform: scale(1.05);
-    border-color: rgba(255, 255, 255, 0.4); 
+    border-color: rgba(255, 255, 255, 0.9); 
   }
 }
 
