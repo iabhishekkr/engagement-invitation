@@ -1,0 +1,754 @@
+/* Base variables */
+:root {
+  --bg-color: #F1EBDF;
+  --text-primary: #5C2018;
+  --text-accent: #B08D57;
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-script: 'Great Vibes', cursive;
+  --font-body: 'Lora', serif;
+  --font-scratch: 'Great Vibes', cursive;
+}
+
+/* Hindi specific font variables override */
+.app-container[data-lang="hi"] {
+  --font-serif: 'Rozha One', serif;
+  --font-script: 'Amita', cursive;
+  --font-body: 'Tiro Devanagari Hindi', serif;
+  --font-scratch: 'Rozha One', serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  /* Add scroll-padding if needed for sticky headers, but we don't have one */
+  height: 100%; 
+}
+
+body {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden !important;
+  position: relative;
+  background-color: #F1EBDF; /* Match --bg-color */
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  /* Removed overflow-x to prevent breaking scroll-snap propagation */
+}
+
+.app-container {
+  width: 100%;
+  min-width: 100%;
+  position: relative;
+  /* Removed overflow-x to prevent breaking scroll-snap propagation */
+}
+
+/* Typography Utility */
+.title-serif {
+  font-family: var(--font-serif);
+}
+
+.script-title {
+  font-family: var(--font-script);
+  font-weight: 400;
+}
+
+/* Curtain Overlay */
+.curtain-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 9999;
+  background-color: transparent;
+  cursor: pointer;
+  transition: opacity 1.5s ease-in-out, visibility 1.5s;
+}
+
+.curtain-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  filter: url(#chroma-key-white);
+  -webkit-filter: url(#chroma-key-white);
+  background: transparent !important;
+  /* Hardware acceleration hints to prevent black artifacts during scroll */
+  transform: translateZ(0); 
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.curtain-instruction {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fdf5e6;
+  font-family: var(--font-serif);
+  text-align: center;
+  pointer-events: none;
+  animation: pulse 2.5s infinite;
+  z-index: 10;
+}
+
+.instruction-box {
+  background: rgba(40, 0, 0, 0.85);
+  padding: 20px 40px;
+  border-radius: 8px;
+  border: 2px solid #bf953f;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(191, 149, 63, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+
+.instruction-box .icon {
+  font-size: 28px;
+  display: block;
+  margin-bottom: 10px;
+  opacity: 0.9;
+}
+
+.instruction-box p {
+  font-size: 1.2rem;
+  margin: 0;
+  color: #fcf6ba;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  font-weight: 600;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.95);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.05);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(0.95);
+    opacity: 0.8;
+  }
+}
+
+/* Open state for curtains */
+.curtain-overlay.opening .curtain-instruction {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.curtain-overlay.hidden-past {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  z-index: -1 !important;
+}
+
+/* Floating Language Switcher */
+.floating-lang-switch {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10001;
+  background: rgba(241, 235, 223, 0.9);
+  padding: 5px 10px;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(92, 32, 24, 0.2);
+}
+
+.lang-switch {
+  display: flex;
+  gap: 5px;
+  font-size: 0.9rem;
+  font-family: var(--font-serif);
+  cursor: pointer;
+}
+
+.lang-switch span {
+  padding: 5px 12px;
+  border-radius: 15px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.lang-switch span.active {
+  background: var(--text-primary);
+  color: var(--bg-color);
+}
+
+/* Base sections padding */
+section {
+  padding: 80px 20px;
+  text-align: center;
+  width: 100%;
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* Hero */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 100px;
+}
+
+/* Hero names wrapper */
+.hero-names-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-floral {
+  position: absolute;
+  width: 110vh;
+  height: 110vh;
+  object-fit: contain;
+  opacity: 0.2;
+  pointer-events: none;
+  z-index: 0;
+  animation: floralRotate 80s linear infinite;
+}
+
+@keyframes floralRotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.hero-names-wrapper .names,
+.hero-names-wrapper .subtitle {
+  position: relative;
+  z-index: 1;
+}
+
+.names {
+  font-size: 6rem;
+  line-height: 1;
+  margin-bottom: 20px;
+  font-family: var(--font-script);
+  font-weight: 400;
+  color: var(--text-primary);
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 0.3em;
+}
+
+.name-part {
+  display: inline;
+}
+
+.name-sep {
+  display: inline;
+  font-size: 0.75em;
+  opacity: 0.8;
+}
+
+.subtitle {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  animation: fadeIn 2s forwards;
+  animation-delay: 2s;
+  opacity: 0;
+  color: var(--text-primary);
+  font-family: var(--font-serif);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  z-index: 100;
+}
+
+.scroll-indicator .mouse {
+  width: 26px;
+  height: 40px;
+  border: 2px solid var(--text-primary);
+  border-radius: 15px;
+  position: relative;
+}
+
+.scroll-indicator .wheel {
+  width: 4px;
+  height: 8px;
+  background: var(--text-primary);
+  border-radius: 2px;
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: scrollWheel 1.5s infinite;
+}
+
+@keyframes scrollWheel {
+  0% {
+    top: 5px;
+    opacity: 1;
+  }
+
+  100% {
+    top: 20px;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Section general */
+.section-title {
+  font-size: 4rem;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.section-title.title-serif {
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 30px;
+}
+
+/* Scratch Area */
+.reveal-section {
+  padding: 100px 20px;
+}
+
+.section-subtitle {
+  font-family: var(--font-serif);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  margin-bottom: 50px;
+}
+
+.scratch-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.scratch-card {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #E8DECA;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.hidden-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.5rem;
+  font-family: var(--font-scratch);
+  font-weight: 400;
+  color: var(--text-primary);
+  user-select: none;
+}
+
+.scratch-card canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+.scratch-hint {
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #7a4640;
+}
+
+/* Countdown */
+.countdown-section {
+  padding: 80px 20px;
+}
+
+.timer {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 30px;
+}
+
+.time-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.time-box .number {
+  font-family: var(--font-serif);
+  font-size: 3.5rem;
+  line-height: 1;
+}
+
+.time-box .label {
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 5px;
+}
+
+/* Venue */
+.venue-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* For screens where width > height (Desktop/Tablet) */
+@media (min-width: 769px) and (orientation: landscape) {
+  .venue-content {
+    flex-direction: row;
+    justify-content: center;
+    text-align: left;
+    align-items: center;
+  }
+
+  .venue-image, .venue-details {
+    flex: 1;
+    width: 50%;
+  }
+
+  .venue-image {
+    margin-bottom: 0;
+  }
+
+  .venue-details {
+    padding-left: 50px;
+  }
+
+  .venue-name {
+    margin-bottom: 20px;
+    font-size: 2.8rem;
+  }
+
+  .venue-address {
+    font-size: 1.4rem;
+    margin-bottom: 0;
+  }
+}
+
+/* Standard Tablet/Mobile vertical stack */
+.venue-image {
+  margin-bottom: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 500px;
+}
+
+.venue-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+  mix-blend-mode: multiply;
+}
+
+.venue-name {
+  font-size: 2.2rem;
+  margin-bottom: 15px;
+}
+
+.venue-address {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+
+
+/* Thank You Section */
+.thank-you-section {
+  padding: 80px 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Footer */
+.main-footer {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.footer-names {
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+.footer-bottom {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.7;
+}
+
+/* Animations - React implementation friendly */
+.fade-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   Mobile: ≤480px | Tablet: 481-768px | Desktop: 769px+
+=================================== */
+
+/* --- Large tablet / small laptop (769px – 1250px) --- */
+@media (min-width: 769px) and (max-width: 1250px) {
+  .names {
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+  }
+
+  .section-title {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+  }
+
+  .section-title.title-serif {
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+  }
+
+  .hero {
+    padding-top: 80px;
+  }
+}
+
+/* --- Tablet (481px – 768px) --- */
+@media (max-width: 768px) {
+  section {
+    padding: 60px 30px;
+  }
+
+  .names {
+    font-size: clamp(2rem, 7vw, 4rem);
+  }
+
+  .subtitle {
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+  }
+
+  .section-title {
+    font-size: 3.5rem;
+  }
+
+  .section-title.title-serif {
+    font-size: 2.2rem;
+  }
+
+  .timer {
+    gap: 24px;
+  }
+
+  .time-box .number {
+    font-size: 3rem;
+  }
+
+  .scratch-container {
+    gap: 20px;
+  }
+
+  .scratch-card {
+    width: 130px;
+    height: 130px;
+  }
+
+  .hidden-content {
+    font-size: 2.5rem;
+  }
+
+  .venue-image img {
+    max-width: 100%;
+  }
+
+  .floating-lang-switch {
+    top: 12px;
+    right: 12px;
+  }
+}
+
+/* --- Mobile --- */
+@media (max-width: 480px) {
+  section {
+    padding: 50px 20px;
+  }
+
+  .names {
+    font-size: 3rem;
+    line-height: 1.2;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .name-sep {
+    font-size: 2rem;
+    line-height: 1.4;
+  }
+
+  .subtitle {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+  }
+
+  .section-title {
+    font-size: 2.6rem;
+  }
+
+  .section-title.title-serif {
+    font-size: 1.8rem;
+  }
+
+  .section-subtitle {
+    font-size: 0.65rem;
+  }
+
+  /* Timer — stack pairs on very small screens */
+  .timer {
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .time-box {
+    min-width: 60px;
+  }
+
+  .time-box .number {
+    font-size: 2.2rem;
+  }
+
+  .time-box .label {
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+  }
+
+  /* Scratch cards — smaller on phones */
+  .scratch-container {
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .scratch-card {
+    width: 95px;
+    height: 95px;
+  }
+
+  .hidden-content {
+    font-size: 1.8rem;
+  }
+
+  /* Venue */
+  .venue-address {
+    font-size: 0.95rem;
+  }
+
+  /* Language switcher */
+  .floating-lang-switch {
+    top: 10px;
+    right: 10px;
+    padding: 4px 8px;
+  }
+
+  .lang-switch span {
+    padding: 4px 9px;
+    font-size: 0.8rem;
+  }
+
+  /* Floral pattern scaling */
+  .hero-floral {
+    width: 100vw;
+    height: 100vw;
+  }
+
+  /* Footer */
+  .footer-names {
+    font-size: 1.2rem;
+  }
+
+  .main-footer {
+    padding: 30px 20px;
+  }
+}
