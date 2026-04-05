@@ -3,7 +3,7 @@ import './App.css';
 import ScratchCard from './components/ScratchCard';
 import FloralOverlay from './components/FloralOverlay';
 import { WEDDING_DATA } from './constants';
-
+import Confetti from 'react-confetti';
 // Component for Fade In Sections
 const FadeSection = ({ children, className = '' }) => {
   const [isVisible, setVisible] = useState(false);
@@ -39,7 +39,21 @@ function App() {
   const [timeLeft, setTimeLeft] = useState({ days: '000', hours: '00', mins: '00', secs: '00' });
   const [lang, setLang] = useState('en'); // 'en' or 'hi'
   const [isScrolledPast, setIsScrolledPast] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [isConfettiActive, setIsConfettiActive] = useState(false);
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
   const videoRef = useRef(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Monitor scroll position to hide the complex SVG video filter when out of view
   // This physically bypasses Chrome's off-screen hardware acceleration bug (the black bar!)
@@ -100,6 +114,24 @@ function App() {
   const [revealedStates, setRevealedStates] = useState([false, false, false]);
   const allRevealed = revealedStates.every(v => v === true);
 
+  useEffect(() => {
+    if (allRevealed) {
+      setShowConfetti(true);
+      setIsConfettiActive(true); // Creates continuous stream
+
+      // Stop spawning new confetti after 3 seconds
+      const stopSpawn = setTimeout(() => setIsConfettiActive(false), 3000);
+
+      // Fully unmount the canvas after 7 seconds to let pieces fall naturally
+      const unmount = setTimeout(() => setShowConfetti(false), 7000);
+
+      return () => {
+        clearTimeout(stopSpawn);
+        clearTimeout(unmount);
+      };
+    }
+  }, [allRevealed]);
+
   const handleReveal = (index) => {
     setRevealedStates(prev => {
       const next = [...prev];
@@ -121,6 +153,16 @@ function App() {
 
   return (
     <div className="app-container" data-lang={lang}>
+      {showConfetti && (
+        <Confetti
+          width={windowSize.width}
+          height={windowSize.height}
+          style={{ position: 'fixed', top: 0, left: 0, zIndex: 10000 }}
+          recycle={isConfettiActive}
+          numberOfPieces={300}
+          gravity={0.15}
+        />
+      )}
       {/* SVG Chroma Key Filter to make the MP4's white hole mathematically transparent while keeping red opaque */}
       <svg aria-hidden="true" style={{ position: 'absolute', width: 0, height: 0, pointerEvents: 'none', visibility: 'hidden' }}>
         <filter id="chroma-key-white" filterUnits="objectBoundingBox" x="-50%" y="-50%" width="200%" height="200%">
@@ -221,7 +263,7 @@ function App() {
             <ScratchCard text={new Date(WEDDING_DATA.targetDate).getFullYear().toString()} onReveal={() => handleReveal(2)} />
           </div>
           {allRevealed ? (
-            <div className="scroll-indicator" style={{ position: 'relative', bottom: 'auto', marginTop: '20px', animationDelay: '0.5s' }}>
+            <div className="scroll-indicator" style={{ animationDelay: '0.5s' }}>
               <div className="mouse">
                 <div className="wheel"></div>
               </div>
