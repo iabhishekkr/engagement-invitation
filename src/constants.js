@@ -15,8 +15,7 @@ export const WEDDING_DATA = {
     venueTitle: "Divine Hotel and Resorts",
     venueAddressPart1: "Sikhar More, Road, Manpur Railway Station Road",
     venueAddressPart2: "Near Primary School, Gaya, Bihar 823003",
-    footerThankYou: "Thank You",
-    footerDesign: "Design by Theatre Demo | Made with 🤎"
+    footerThankYou: "Thank You"
   },
   hi: {
     names: "अभिषेक और मनीषा",

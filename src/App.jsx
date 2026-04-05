@@ -163,7 +163,7 @@ function App() {
           <div
             className={`curtain-overlay ${curtainState === 'opening' ? 'opening' : ''} ${isScrolledPast ? 'hidden-past' : ''}`}
             onClick={handleCurtainClick}
-            style={{ 
+            style={{
               position: curtainState === 'opening' ? 'fixed' : 'absolute',
               top: 0,
               left: 0,
@@ -220,7 +220,16 @@ function App() {
             <ScratchCard text={new Date(WEDDING_DATA.targetDate).toLocaleString(lang === 'hi' ? 'hi-IN' : 'en-US', { month: 'short' })} onReveal={() => handleReveal(1)} />
             <ScratchCard text={new Date(WEDDING_DATA.targetDate).getFullYear().toString()} onReveal={() => handleReveal(2)} />
           </div>
-          <p className="scratch-hint">{content.scratchHint}</p>
+          {allRevealed ? (
+            <div className="scroll-indicator" style={{ position: 'relative', bottom: 'auto', marginTop: '20px', animationDelay: '0.5s' }}>
+              <div className="mouse">
+                <div className="wheel"></div>
+              </div>
+              <p>{content.scrollDown}</p>
+            </div>
+          ) : (
+            <p className="scratch-hint">{content.scratchHint}</p>
+          )}
         </FadeSection>
 
         {allRevealed && (
@@ -243,7 +252,7 @@ function App() {
                 </div>
                 <div className="venue-details">
                   <h2 className="venue-name title-serif">{content.venueTitle}</h2>
-                  <p className="venue-address">{content.venueAddressPart1} <br/> {content.venueAddressPart2}</p>
+                  <p className="venue-address">{content.venueAddressPart1} <br /> {content.venueAddressPart2}</p>
                 </div>
               </div>
             </FadeSection>
@@ -252,7 +261,6 @@ function App() {
               <footer className="main-footer">
                 <h2 className="script-title">{content.footerThankYou}</h2>
                 <p className="footer-names">{content.names}</p>
-                <p className="footer-bottom">{content.footerDesign}</p>
               </footer>
             </FadeSection>
           </>
