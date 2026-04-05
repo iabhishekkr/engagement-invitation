@@ -38,9 +38,10 @@ const Hero = ({
           onEnded={() => setCurtainState('opened')}
           className="curtain-video"
           src="/assets/curtain-video.mp4"
-          poster="/assets/curtain-closed.jpg"
+          poster={curtainState === 'closed' ? "/assets/curtain-closed.jpg" : undefined}
           playsInline
           muted
+          preload="auto"
         />
         {curtainState === 'closed' && (
           <div className="curtain-instruction">

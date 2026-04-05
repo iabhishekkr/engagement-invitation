@@ -67,14 +67,17 @@ function App() {
 
   const handleCurtainClick = () => {
     if (curtainState === 'closed') {
-      setCurtainState('opening');
+      // Trigger play IMMEDIATELY before React state batching
       if (videoRef.current) {
         videoRef.current.play().catch(err => console.error("Video play failed", err));
       }
+      
+      setCurtainState('opening');
+      
       if (audioRef.current) {
         audioRef.current.play()
           .then(() => setIsMusicPlaying(true))
-          .catch(err => console.log("Autoplay still blocked:", err));
+          .catch(err => console.log("Autoplay blocked:", err));
       }
     }
   };
