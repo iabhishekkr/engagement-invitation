@@ -23,7 +23,7 @@ const Hero = ({
         className={`curtain-overlay ${curtainState === 'opening' ? 'opening' : ''} ${isScrolledPast ? 'hidden-past' : ''}`}
         onClick={handleCurtainClick}
         style={{
-          position: curtainState === 'opening' ? 'fixed' : 'absolute',
+          position: (curtainState === 'closed' || curtainState === 'opening') ? 'fixed' : 'absolute',
           top: 0,
           left: 0,
           width: '100%',

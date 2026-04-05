@@ -62,6 +62,7 @@ body {
   position: relative;
   background-color: #F1EBDF;
   /* Match --bg-color */
+  scrollbar-gutter: stable; /* Prevent layout shift when scrollbar appears */
 }
 
 #root {
