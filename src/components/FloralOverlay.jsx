@@ -3,6 +3,8 @@ import React, { useRef, useEffect, useState } from 'react';
 // Strips white/gray background from the PNG using canvas pixel processing
 const FloralOverlay = ({ src, className }) => {
   const [processedSrc, setProcessedSrc] = useState(null);
+  const [isVisible, setIsVisible] = useState(true);
+  const imgRef = useRef(null);
 
   useEffect(() => {
     const img = new Image();
@@ -39,8 +41,31 @@ const FloralOverlay = ({ src, className }) => {
     img.src = src;
   }, [src]);
 
+  useEffect(() => {
+    if (!imgRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0 }
+    );
+
+    observer.observe(imgRef.current);
+    return () => observer.disconnect();
+  }, [processedSrc]);
+
   if (!processedSrc) return null;
-  return <img src={processedSrc} className={className} alt="" aria-hidden="true" />;
+  return (
+    <img 
+      ref={imgRef}
+      src={processedSrc} 
+      className={className} 
+      style={{ animationPlayState: isVisible ? 'running' : 'paused' }}
+      alt="" 
+      aria-hidden="true" 
+    />
+  );
 };
 
 export default FloralOverlay;
