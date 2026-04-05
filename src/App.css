@@ -109,29 +109,54 @@ body {
 }
 
 .instruction-box {
-  background: rgba(40, 0, 0, 0.85);
-  padding: 20px 40px;
-  border-radius: 8px;
-  border: 2px solid #bf953f;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(191, 149, 63, 0.3);
-  text-transform: uppercase;
-  letter-spacing: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  background: transparent;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
-.instruction-box .icon {
-  font-size: 28px;
-  display: block;
-  margin-bottom: 10px;
-  opacity: 0.9;
+.instruction-icon-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 80px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  animation: pulseCircle 2s infinite ease-in-out;
+}
+
+.instruction-hand-icon {
+  color: rgba(255, 255, 255, 0.6);
+  opacity: 0.8;
 }
 
 .instruction-box p {
-  font-size: 1.2rem;
+  font-size: 0.95rem;
   margin: 0;
-  color: #fcf6ba;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
-  font-weight: 600;
+  color: rgba(255, 255, 255, 0.4);
+  font-family: var(--font-body);
+  letter-spacing: 1.5px;
+  font-weight: 400;
+  text-transform: none;
+}
+
+@keyframes pulseCircle {
+  0%, 100% { 
+    transform: scale(1);
+    border-color: rgba(255, 255, 255, 0.2); 
+  }
+  50% { 
+    transform: scale(1.05);
+    border-color: rgba(255, 255, 255, 0.4); 
+  }
 }
 
 @keyframes pulse {
@@ -165,7 +190,7 @@ body {
   z-index: -1 !important;
 }
 
-/* Floating Language Switcher */
+/* Floating Controls (Language & Music) */
 .floating-lang-switch {
   position: fixed;
   top: 20px;
@@ -176,6 +201,36 @@ body {
   border-radius: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(92, 32, 24, 0.2);
+  backdrop-filter: blur(5px);
+}
+
+.music-toggle {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 10001;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: rgba(92, 32, 24, 0.85);
+  color: #F1EBDF;
+  border: 1px solid rgba(191, 149, 63, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.music-toggle:hover {
+  transform: scale(1.1);
+  background: var(--text-primary);
+}
+
+.music-toggle:active {
+  transform: scale(0.95);
 }
 
 .lang-switch {

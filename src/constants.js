@@ -4,7 +4,7 @@ export const WEDDING_DATA = {
     names: "Abhishek & Manisha",
     nameParts: { first: "Abhishek", sep: "&", second: "Manisha" },
     subtitle: "ARE GETTING ENGAGED",
-    curtainTap: "Tap to open",
+    curtainTap: "Tap to continue",
     scrollDown: "Scroll down",
     revealTitle: "Reveal",
     revealSubtitle: "SCRATCH TO DISCOVER THE DATE",

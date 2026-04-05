@@ -4,6 +4,7 @@ import ScratchCard from './components/ScratchCard';
 import FloralOverlay from './components/FloralOverlay';
 import { WEDDING_DATA } from './constants';
 import Confetti from 'react-confetti';
+import { Hand, Volume2, VolumeX } from 'lucide-react';
 // Component for Fade In Sections
 const FadeSection = ({ children, className = '' }) => {
   const [isVisible, setVisible] = useState(false);
@@ -40,12 +41,21 @@ function App() {
   const [lang, setLang] = useState('en'); // 'en' or 'hi'
   const [isScrolledPast, setIsScrolledPast] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const [isConfettiActive, setIsConfettiActive] = useState(false);
+  const audioRef = useRef(null);
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
   });
   const videoRef = useRef(null);
+
+  useEffect(() => {
+    // Basic attempt to play on load (will likely be blocked by browser)
+    if (audioRef.current) {
+      audioRef.current.volume = 0.5;
+    }
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -79,6 +89,23 @@ function App() {
       if (videoRef.current) {
         videoRef.current.play().catch(err => console.error("Video play failed", err));
       }
+      // Resume background music on first interaction
+      if (audioRef.current) {
+        audioRef.current.play()
+          .then(() => setIsMusicPlaying(true))
+          .catch(err => console.log("Autoplay still blocked:", err));
+      }
+    }
+  };
+
+  const toggleMusic = () => {
+    if (audioRef.current) {
+      if (isMusicPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsMusicPlaying(!isMusicPlaying);
     }
   };
 
@@ -153,6 +180,8 @@ function App() {
 
   return (
     <div className="app-container" data-lang={lang}>
+      <audio ref={audioRef} src="/assets/music.mp3" loop />
+
       {showConfetti && (
         <Confetti
           width={windowSize.width}
@@ -187,13 +216,17 @@ function App() {
         </filter>
       </svg>
 
-      {/* Floating Language Switcher */}
+      {/* Floating Controls (Language & Music) */}
       <div className="floating-lang-switch">
         <div className="lang-switch">
           <span className={lang === 'en' ? 'active' : ''} onClick={() => setLang('en')}>EN</span>
           <span className={lang === 'hi' ? 'active' : ''} onClick={() => setLang('hi')}>HI</span>
         </div>
       </div>
+
+      <button className="music-toggle" onClick={toggleMusic} aria-label="Toggle Music">
+        {isMusicPlaying ? <Volume2 size={20} /> : <VolumeX size={20} />}
+      </button>
 
       {/* Main Content */}
       <main className="content-wrapper">
@@ -228,7 +261,9 @@ function App() {
             {curtainState === 'closed' && (
               <div className="curtain-instruction">
                 <div className="instruction-box">
-                  <span className="icon">👆</span>
+                  <div className="instruction-icon-wrapper">
+                    <Hand size={30} className="instruction-hand-icon" />
+                  </div>
                   <p>{content.curtainTap}</p>
                 </div>
               </div>
